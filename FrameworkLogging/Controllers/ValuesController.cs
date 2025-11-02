@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,10 +10,21 @@ namespace FrameworkLogging.Controllers
 {
     public class ValuesController : ApiController
     {
+        private readonly ILogger<ValuesController> _logger;
+
+        public ValuesController(ILogger<ValuesController> logger)
+        {
+            _logger = logger;
+        }
+
         // GET api/values
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            var values = new string[] { "value1", "value2" };
+            using (_logger.BeginScope((nameof(values), values)))
+                _logger.LogInformation("Found {count} values.", values.Length);
+
+            return values;
         }
 
         // GET api/values/5

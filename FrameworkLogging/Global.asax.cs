@@ -1,4 +1,5 @@
-﻿using SimpleInjector;
+﻿using Microsoft.Extensions.Logging;
+using SimpleInjector;
 using SimpleInjector.Integration.WebApi;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,14 @@ namespace FrameworkLogging
             var container = new Container();
 
             container.RegisterWebApiControllers(GlobalConfiguration.Configuration);
+
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddDebug();
+            });
+
+            container.RegisterInstance(loggerFactory);
+            container.Register(typeof(ILogger<>), typeof(Logger<>), Lifestyle.Singleton);
 
             container.Verify();
 
