@@ -21,7 +21,7 @@ namespace FrameworkLogging.Controllers
         public IEnumerable<string> Get()
         {
             var values = new string[] { "value1", "value2" };
-            using (_logger.BeginScope((nameof(values), values)))
+            using (_logger.BeginScope(("@values", values)))
                 _logger.LogInformation("Found {count} values.", values.Length);
 
             return values;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Serilog;
 using SimpleInjector;
 using SimpleInjector.Integration.WebApi;
 using System;
@@ -28,15 +29,26 @@ namespace FrameworkLogging
                 GetDependencyResolver();
         }
 
+        protected void Application_End()
+        {
+            Log.CloseAndFlush();
+        }
+
         private System.Web.Http.Dependencies.IDependencyResolver GetDependencyResolver()
         {
             var container = new Container();
 
             container.RegisterWebApiControllers(GlobalConfiguration.Configuration);
 
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .MinimumLevel.Debug()
+                .WriteTo.Debug()
+                .CreateLogger();
+
             var loggerFactory = LoggerFactory.Create(builder =>
             {
-                builder.AddDebug();
+                builder.AddSerilog(Log.Logger, dispose: true);
             });
 
             container.RegisterInstance(loggerFactory);
