@@ -23,8 +23,6 @@ namespace FrameworkLogging
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            var container = new Container();
-
             GlobalConfiguration.Configuration.DependencyResolver =
                 GetDependencyResolver();
         }
