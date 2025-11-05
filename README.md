@@ -29,8 +29,8 @@ All logs in this example are sent to the **Visual Studio Debug window** for simp
 First, add SimpleInjector to the project:
 
 ```bash
-Install-Package Serilog
-Install-Package Serilog.Integration.WebApi
+Install-Package SimpleInjector
+Install-Package SimpleInjector.Integration.WebApi
 ```
 
 Then, configure it on `Global.asax.cs`.
